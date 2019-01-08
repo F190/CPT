@@ -1,5 +1,5 @@
 screen = 'menu'
-player_x = 350
+player_x = 335
 player_y = 350
 key_pressed = [False for key_code in range(256)]
 
@@ -78,8 +78,15 @@ def draw():
                 screen = 'menu'
                     
     elif screen == 'room2':
-        
-        background(0)
+        background(255)
+        fill(125, 175, 0)
+        rect(250, 200, 30, 500)
+        rect(420, 200, 30, 500)
+        rect(110, 170, 170, 30)
+        rect(420, 170, 170, 30)
+        rect(80, 0, 30, 200)
+        rect(560, 0, 30, 200)
+        fill(0)
         player_square()
         
 
@@ -117,3 +124,7 @@ def key_pressed():
 def key_released():
     global key_pressed
     key_pressed[keyCode] = False
+
+    
+    
+            

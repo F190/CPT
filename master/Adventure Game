@@ -1,0 +1,119 @@
+screen = 'menu'
+player_x = 350
+player_y = 350
+key_pressed = [False for key_code in range(256)]
+
+def draw():
+    global screen, player_x, player_y
+    
+    if player_y < -1:
+        player_y = 680
+    if player_y > 701:
+        player_y = 20
+    if player_x < -1:
+        player_x = 680
+    if player_x > 701:
+        player_x = 20
+    
+    if screen == 'menu':
+        background(125, 125, 125)
+        fill(0)
+        textAlign(CENTER)
+        textSize(50)
+        text("Play",350 ,300)
+        textSize(20)
+        textAlign(CENTER)
+        text('Press [p] to play the game',350,340)
+        textSize(50) 
+        textAlign(CENTER)
+        text("Instruction",350,500)
+        textSize(20)
+        textAlign(CENTER)
+        text('Press [i] for instruction',350,540)
+        
+        if keyPressed:
+            if key == 'p':
+                screen = 'play'
+        if keyPressed:
+            if key == 'i':
+                screen = "instruction"
+                
+    elif screen == 'play':
+        background(240, 240, 240)
+        noStroke()
+        fill(125, 125, 0)
+        rect(0, 0, 30, 320)
+        rect(0, 0, 320, 30)
+        rect(670, 0, 30, 320)
+        rect(380, 0, 320, 30)
+        rect(0, 380, 30, 320)
+        rect(0, 670, 320, 30)
+        rect(670, 380, 30, 320)
+        rect(380, 670, 320, 30)
+        if player_y <= 0:
+            screen = 'room2'
+        
+        fill(0)
+        player_square()
+            
+    elif screen == 'instruction':
+        background(125, 125, 125)
+        textAlign(LEFT)
+        textSize(25)
+        text('''
+        Welcome to our pizzle game, 
+        you were locked a room 
+        and required to find a key to unlock the door, 
+        you cannot pass the wall.    
+        To control your character, 
+        press up to go up, down to go dwon, 
+        right to go right and left to go left. 
+        Good Luck!!!''', 0, 100 )
+    
+        textSize(25)
+        text('Press [m] back to the manu!', 20, 550)
+            
+        if keyPressed:
+            if key == 'm':
+                screen = 'menu'
+                    
+    elif screen == 'room2':
+        
+        background(0)
+        player_square()
+        
+
+
+
+def setup():
+    size(700, 700)
+    background(255)
+    
+
+def player_square():
+    global player_x, player_y, screen
+    rect(player_x, player_y, 30, 30)
+    
+    if keyPressed is True and keyCode == 37:
+        player_x -= 5
+    if keyPressed is True and keyCode == 39:
+        player_x += 5
+    if keyPressed is True and keyCode == 38:
+        player_y -= 5
+    if keyPressed is True and keyCode == 40:
+        player_y += 5
+
+    fill(0)
+    
+
+        
+def key_pressed():
+    global key_pressed
+    print(keyCode)
+    keyPressed[keyCode] = True
+    
+        
+        
+def key_released():
+    global key_pressed
+    key_pressed[keyCode] = False

@@ -1,0 +1,219 @@
+screen = 'menu'
+player_x = 335
+player_y = 350
+have_key = False
+door_open = False
+colorr = 255
+key_x = 250
+key_y = 300
+door_x = 330
+door_y = 10
+
+room1_x = 0
+room1_y = 0
+
+def draw():
+    global screen, player_x, player_y, door_x, door_y, down_key, up_key, right_key, left_key
+
+    if player_y < -1:
+        player_y = 680
+    if player_y > 701:
+        player_y = 20
+    if player_x < -1:
+        player_x = 680
+    if player_x > 701:
+        player_x = 20
+    
+    if screen == 'menu':
+        background(125, 125, 125)
+        fill(0)
+        textAlign(CENTER)
+        textSize(50)
+        text("Play",350 ,300)
+        textSize(20)
+        textAlign(CENTER)
+        text('Press [p] to play the game',350,340)
+        textSize(50) 
+        textAlign(CENTER)
+        text("Instruction",350,500)
+        textSize(20)
+        textAlign(CENTER)
+        text('Press [i] for instruction',350,540)
+        
+        if keyPressed:
+            if key == 'p':
+                screen = 'play'
+        if keyPressed:
+            if key == 'i':
+                screen = "instruction"
+                
+    elif screen == 'play':
+        global room1_x, room1_y
+        key_pressed()
+        background(255)
+        hidden_key()
+        noStroke()
+        fill(125, 125, 0)
+        rect(room1_x, room1_y, 30, 700)
+        rect(room1_x, room1_y, 320, 30)
+        rect(room1_x + 670, room1_y, 30, 700)
+        rect(room1_x + 380, room1_y, 320, 30)
+        rect(room1_x, room1_y + 380, 30, 320)
+        rect(room1_x, room1_y + 670, 700, 30)
+        rect(room1_x + 670, room1_y + 380, 30, 320)
+        rect(room1_x + 380, room1_y + 670, 320, 30)
+        if player_y <= 0:
+            screen = 'room2'
+        
+        fill(0)
+        player_square()
+            
+    elif screen == 'instruction':
+        background(125, 125, 125)
+        textAlign(LEFT)
+        textSize(25)
+        text('''
+        Welcome to our pizzle game, 
+        you were locked a room 
+        and required to find a key to unlock the door, 
+        you cannot pass the wall.    
+        To control your character, 
+        press up to go up, down to go dwon, 
+        right to go right and left to go left. 
+        Good Luck!!!''', 0, 100 )
+    
+        textSize(25)
+        text('Press [m] back to the manu!', 20, 550)
+            
+        if keyPressed:
+            if key == 'm':
+                screen = 'menu'
+                    
+    elif screen == 'room2':
+        key_pressed()
+        background(255)
+        hidden_key()
+        fill(125, 175, 0)
+        rect(250, 200, 30, 500)
+        rect(420, 200, 30, 500)
+        rect(110, 170, 170, 30)
+        rect(420, 170, 170, 30)
+        rect(80, 0, 30, 200)
+        rect(590, 0, 30, 200)
+
+        fill(200, 200, 125)
+        rect(250, 0, 80, 60)
+        rect(370, 0, 80, 60)
+        fill(0)
+        locked_door()
+        player_square()
+        
+        if player_y > 700:
+            screen = 'play'
+        if player_y <= 0 and player_x <= 370 and player_x >= 330:
+            screen = 'finalplay'
+            
+    elif screen == 'finalplay':
+        final_room()
+
+
+
+def setup():
+    size(700, 700)
+    background(255)
+    
+
+def player_square():
+    global player_x, player_y, screen,left_key, right_key, down_key, up_key
+    rect(player_x, player_y, 30, 30)
+    
+    if left_key is True and keyCode == 37:
+        player_x -= 5
+    if right_key is True and keyCode == 39:
+        player_x += 5
+    if down_key is True and keyCode == 38:
+        player_y -= 5
+    if up_key is True and keyCode == 40:
+        player_y += 5
+
+
+    fill(0)
+
+
+def hidden_key():
+    global player_x, player_y, colorr, key_x, key_y, have_key
+    fill(colorr)
+    ellipse(key_x, key_y, 20, 20)
+    
+    if (abs(player_x - key_x) < 25) and (abs(player_y - key_y) < 25):
+        colorr = 100
+        key_x = player_x
+        key_y = player_y
+        have_key = True
+        
+    if have_key == True:
+        key_x = player_x
+        key_y = player_y
+        
+    
+    
+    
+
+    
+def locked_door():
+    global door_x, door_y, player_y, door_open
+    rect(door_x, door_y, 40, 10)
+    rect(door_x, door_y + 20, 40, 10)
+    rect(door_x, door_y + 40, 40, 10)
+    
+    if (abs(key_y - (door_y+40)) < 20):
+        door_x += 700
+        door_open = True
+        
+        
+def key_pressed():
+    global left_key, right_key, down_key, up_key, door_y, player_y, room1_x, room1_2
+    
+    left_key = False
+    right_key = False
+    down_key = False
+    up_key = False
+    
+    if keyPressed is True and keyCode == 37:
+        left_key = True
+    if keyPressed is True and keyCode == 39:
+        right_key = True
+    if keyPressed is True and keyCode == 38:
+        down_key = True
+    if keyPressed is True and keyCode == 40:
+        up_key = True
+    
+    if screen == 'room2' and player_y  - (door_y + 40) == 10 and door_open == False:
+        down_key = False
+    
+    elif screen == 'play' and player_y - (room1_y + 30) == 0 and player_x < 320 or player_x > 380 and screen == 'play' and player_y - (room1_y + 30) == 0:
+        down_key = False
+    
+    elif screen == 'play' and (room1_y + 670) - player_y == 30:
+        up_key = False
+        
+    elif screen == 'play' and player_x - (room1_x + 30) == 0:
+        left_key = False
+        
+    elif screen == 'play' and (room1_x + 670) - player_x == 30:
+        right_key = False
+    
+    
+def final_room():
+    global screen
+    key_pressed()
+    background(255, 255, 153)
+    player_square()
+    fill(0)
+    textAlign(CENTER)
+    textSize(30)
+    text("Congraulations, you have win the game!!!",350 ,300)
+    
+    if player_y > 700:
+        screen = 'room2'
+    

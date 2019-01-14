@@ -193,7 +193,7 @@ def final_room():
     fill(0)
     textAlign(CENTER)
     textSize(30)
-    text("Congraulations, you have win the game!!!",350 ,300)
+    text("Congratulations, you have win the game!!!",350 ,300)
     
     if player_y > 700:
         screen = 'room2'

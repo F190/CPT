@@ -1,11 +1,16 @@
 screen = 'menu'
 player_x = 335
 player_y = 350
-key_pressed = [False for key_code in range(256)]
+have_key = False
+colorr = 255
+key_x = 250
+key_y = 300
+door_x = 330
+door_y = 10
 
 def draw():
     global screen, player_x, player_y
-    
+
     if player_y < -1:
         player_y = 680
     if player_y > 701:
@@ -39,7 +44,9 @@ def draw():
                 screen = "instruction"
                 
     elif screen == 'play':
-        background(240, 240, 240)
+        key_pressed()
+        background(255)
+        hidden_key()
         noStroke()
         fill(125, 125, 0)
         rect(0, 0, 30, 320)
@@ -78,17 +85,30 @@ def draw():
                 screen = 'menu'
                     
     elif screen == 'room2':
+        key_pressed()
         background(255)
+        hidden_key()
         fill(125, 175, 0)
         rect(250, 200, 30, 500)
         rect(420, 200, 30, 500)
         rect(110, 170, 170, 30)
         rect(420, 170, 170, 30)
         rect(80, 0, 30, 200)
-        rect(560, 0, 30, 200)
+        rect(590, 0, 30, 200)
+
+        fill(200, 200, 125)
+        rect(250, 0, 80, 60)
+        rect(370, 0, 80, 60)
         fill(0)
+        locked_door()
         player_square()
-        
+        if player_y > 700:
+            screen = 'play'
+        if player_y <= 0 and player_x <= 370 and player_x >= 330:
+            screen = 'finalplay'
+            
+    elif screen == 'finalplay':
+        final_room()
 
 
 
@@ -98,33 +118,84 @@ def setup():
     
 
 def player_square():
-    global player_x, player_y, screen
+    global player_x, player_y, screen,left_key, right_key, down_key, up_key
     rect(player_x, player_y, 30, 30)
     
-    if keyPressed is True and keyCode == 37:
+    if left_key is True and keyCode == 37:
         player_x -= 5
-    if keyPressed is True and keyCode == 39:
+    if right_key is True and keyCode == 39:
         player_x += 5
-    if keyPressed is True and keyCode == 38:
+    if down_key is True and keyCode == 38:
         player_y -= 5
-    if keyPressed is True and keyCode == 40:
+    if up_key is True and keyCode == 40:
         player_y += 5
 
+
     fill(0)
+
+
+def hidden_key():
+    global player_x, player_y, colorr, key_x, key_y, have_key
+    fill(colorr)
+    ellipse(key_x, key_y, 20, 20)
     
+    if (abs(player_x - key_x) < 25) and (abs(player_y - key_y) < 25):
+        colorr = 100
+        key_x = player_x
+        key_y = player_y
+        have_key = True
+        
+    if have_key == True:
+        key_x = player_x
+        key_y = player_y
+        
+    
+    
+    
+
+    
+def locked_door():
+    global door_x, door_y
+    rect(door_x, door_y, 40, 10)
+    rect(door_x, door_y + 20, 40, 10)
+    rect(door_x, door_y + 40, 40, 10)
+    
+    if (abs(key_y - (door_y+40)) < 10):
+        door_x += 700
+        
 
         
 def key_pressed():
-    global key_pressed
-    print(keyCode)
-    keyPressed[keyCode] = True
+    global left_key, right_key, down_key, up_key, door_y, player_y
     
-        
-        
-def key_released():
-    global key_pressed
-    key_pressed[keyCode] = False
+    left_key = False
+    right_key = False
+    down_key = False
+    up_key = False
+    
+    if keyPressed is True and keyCode == 37:
+        left_key = True
+    if keyPressed is True and keyCode == 39:
+        right_key = True
+    if keyPressed is True and keyCode == 38:
+        down_key = True
+    if keyPressed is True and keyCode == 40:
+        up_key = True
+    
 
     
     
-            
+def final_room():
+    global screen
+    key_pressed()
+    background(255, 255, 153)
+    player_square()
+    fill(0)
+    textAlign(CENTER)
+    textSize(30)
+    text("Congraulations, you have win the game!!!",350 ,300)
+    
+    if player_y > 700:
+        screen = 'room2'
+    
+  

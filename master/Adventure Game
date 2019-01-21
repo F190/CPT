@@ -316,12 +316,13 @@ def final_room():
     global screen, time
     key_pressed()
     background(255, 255, 153)
+    fill(0)
     player_square()
     fill(0)
     textAlign(CENTER)
     textSize(30)
     text("Congraulations, you have won the game!!!",350 ,300)
-    keyss()
+    block()
     
     
 def room3():
@@ -450,3 +451,8 @@ def locked_door3():
         textSize(13)
         text('Can not pass throught, find a key to unlock it!', 403, 150)
         
+
+def block():
+    for i in range(0, 700, 25):
+        fill(255)
+        rect(i, 500, 20, 20)
